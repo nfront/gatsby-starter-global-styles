@@ -41,7 +41,18 @@ module.exports = {
     // ],
   },
   plugins: [
-    // `gatsby-plugin-debug-build`,
+    {
+      resolve: 'gatsby-plugin-global-styles',
+      options: {
+        pathToConfigModule: `src/styles/GlobalStyleComponent`,
+        props: {
+          theme: `src/styles/theme`,
+          other: {
+            light: true,
+          },
+        },
+      },
+    },
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-sass`,
     `gatsby-transformer-sharp`, // Support SASS/SCSS in style sheets and CSS Modules

@@ -1,7 +1,8 @@
-import { css } from 'styled-components';
 // =========================
 // NORMALIZING CSS STYLES
 // =========================
+
+import { css } from 'global-styles';
 
 const reset = css`
   html {
@@ -621,7 +622,5 @@ const reset = css`
     }
   }
 `;
-
-console.log('reset', reset);
 
 export default reset;

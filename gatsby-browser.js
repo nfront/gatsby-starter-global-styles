@@ -3,45 +3,12 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { create } from 'jss';
 import { createGenerateClassName, jssPreset, MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeProvider } from 'styled-components';
-// import { ThemeProvider } from 'styled-components';
-// import Helmet from 'react-helmet';
 import { ContextProviderComponent } from './src/utils/context';
 
 import Layout from './src/layouts/layout';
 
 // MUI theme
 import theme from './src/styles/theme';
-
-// import GlobalStyle from './src/styles/createGlobalStyles';
-
-// import GlobalStyleComponent from './src/styles/createGlobalStyles';
-
-// =================================
-// CSS / THEME IMPORTS
-// =================================
-
-// MUI theme
-// import theme from './src/styles/theme';
-
-// const mycomp1 = new GlobalStyleComponent({ theme });
-// const mycomp2 = <GlobalStyleComponent />;
-
-// const reactEle = mycomp1.render();
-
-// const tes = <reactEle />;
-
-// Import general global CSS styles
-// Importing CSS directly makes its styles globally scoped
-// These are added to BOTTOM of head
-// Thus, overriding styled-component styles,
-// which is what GlobalStyles is.
-
-// Theme based global styles.
-// As this file is JS (uses styled-components' createGlobalStyle),
-// it allows us to access theme prop from outer ThemeProvider,
-// I.e., unlike imported global style sheet,
-// this JS has access to theme variables,
-// due to outer ThemeProvider component.
 
 // =================================
 // CONTEXT PROVIDER
@@ -58,12 +25,6 @@ import theme from './src/styles/theme';
 // so we know what context data to set.
 
 // =================================
-// MAIN CODE (WRAPROOTELEMENT API)
-// =================================
-
-// import './src/styles/normalize.module.scss';
-
-// =================================
 // FIXING CSS INJECTION ORDER
 // =================================
 
@@ -77,22 +38,19 @@ const jss = create({
   // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
   insertionPoint: document.getElementById('jss-insertion-point'),
 });
-/* Theme is MUI-based. Uses MUI's createMuiTheme // Applies MUI theme to all MUI components within */
-/* Makes MUI theme available INSIDE styled-components, via props.theme  */
 
-console.log('IN GATSBY-BROWSER.js. process.env:', process.env);
+/** Theme is MUI-based. Uses MUI's createMuiTheme.
+ *  MuiThemeProvider applies MUI theme to all MUI components within.
+ *  ThemeProvider makes MUI theme available INSIDE all styled-components, via props.theme.
+ */
 
 const wrapRootElement = ({ element }) => {
-  console.log('IN GATSBY-BROWSER.js wrapRoot. process.env:', process.env);
   return (
     <>
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
           <JssProvider jss={jss} generateClassName={generateClassName}>
-            <ContextProviderComponent>
-              {/* <GlobalStyleComponent whiteText /> */}
-              {element}
-            </ContextProviderComponent>
+            <ContextProviderComponent>{element}</ContextProviderComponent>
           </JssProvider>
         </ThemeProvider>
       </MuiThemeProvider>
@@ -101,14 +59,7 @@ const wrapRootElement = ({ element }) => {
 };
 
 const wrapPageElement = ({ element, props }) => {
-  // props provide same data to Layout as Page element will get
-  // including location, data, etc - you don't need to pass it
-  return (
-    <>
-      <Layout>{element}</Layout>
-      {/* <GlobalStyle whiteColor /> */}
-    </>
-  );
+  return <Layout>{element}</Layout>;
 };
 
 // eslint-disable-next-line import/prefer-default-export

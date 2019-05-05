@@ -41,7 +41,7 @@ import red from '@material-ui/core/colors/red';
 // in different parts of app.
 // ===========================
 
-export default createMuiTheme({
+const muiTheme = createMuiTheme({
   // breakoint defaults:
   // xs: 0,
   // sm: 600,
@@ -128,7 +128,7 @@ export default createMuiTheme({
   },
   typography: {
     useNextVariants: true,
-    // fontFamily: [`"Roboto", "Helvetica", "Arial", sans-serif"`].join(','),
+    fontFamily: [`"Roboto", "Helvetica", "Arial", "sans-serif"`].join(','),
     // fontWeightMedium: 500,
     h1: {
       // Gatsby theme
@@ -179,3 +179,5 @@ palette: {
   tonalOffset: 0.2,
 },
 */
+
+export default muiTheme;

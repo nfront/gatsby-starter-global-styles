@@ -1,15 +1,25 @@
-/* eslint-disable react/no-danger */
-import React from 'react';
+// =========================
+// GLOBAL CSS STYLES
+// =========================
 
-const GlobalStyle = props => (
-  <style
-    id="nfrontGlobalStyle.js"
-    dangerouslySetInnerHTML={{
-      __html: props.global.toString(),
-    }}
-  />
-);
+// Receives props from GlobalStyle component
+// implemented in gatsby-browser.js
 
-GlobalStyle.displayName = 'GlobalStyle';
+import { css } from 'global-styles';
 
-module.exports = GlobalStyle;
+const globalStyle = css`
+  .my-class2 {
+    margin-bottom: 10rem;
+  }
+
+  html {
+    background-color: blue;
+  }
+
+  body {
+    color: ${props => (props.light ? 'white' : 'black')};
+    font-family: ${props => props.theme.typography.fontFamily};
+  }
+`;
+
+export default globalStyle;

@@ -2,16 +2,13 @@
 // This styled-component has access to theme variables, via props.theme
 // Due to it being inside ThemeProvider component
 
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'global-styles';
 import reset from './reset';
-import globalStyles from './globalStyles';
-
-// import normStyles from './normalize.module.css';
-// import globStyles from './globalStyles.module.scss';
+import globalStyle from './globalStyle';
 
 const GlobalStyleComponent = createGlobalStyle`
   ${reset}
-  ${globalStyles}
+  ${globalStyle}
 `;
 
 export default GlobalStyleComponent;
