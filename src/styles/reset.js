@@ -2,7 +2,7 @@
 // NORMALIZING CSS STYLES
 // =========================
 
-import { css } from 'global-styles';
+import { css } from '@nfront/global-styles';
 
 const reset = css`
   html {

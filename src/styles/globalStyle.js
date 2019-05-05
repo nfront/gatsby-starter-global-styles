@@ -5,7 +5,7 @@
 // Receives props from GlobalStyle component
 // implemented in gatsby-browser.js
 
-import { css } from 'global-styles';
+import { css } from '@nfront/global-styles';
 
 const globalStyle = css`
   .my-class2 {

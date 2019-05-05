@@ -2,7 +2,7 @@
 // This styled-component has access to theme variables, via props.theme
 // Due to it being inside ThemeProvider component
 
-import { createGlobalStyle } from 'global-styles';
+import { createGlobalStyle } from '@nfront/global-styles';
 import reset from './reset';
 import globalStyle from './globalStyle';
 
