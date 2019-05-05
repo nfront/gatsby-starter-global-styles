@@ -2,9 +2,13 @@
 
 Kick off your project with `gatsby-starter-global-styles`. This starter ships with the main Gatsby configuration files, as well as [gatsby-plugin-global-styles](https://github.com/magnusriga/gatsby-plugin-global-styles).
 
-To showcase the power of the Global Styles plugin, this starter includes multiple styling approaches such as `styled-components`, `Material-UI`, and `typography.js`. [gatsby-plugin-global-styles](https://github.com/magnusriga/gatsby-plugin-global-styles) ensures that the defined global styles are compiled into one style tag, automatically placed at the top of `<head>`.
+[gatsby-plugin-global-styles](https://github.com/magnusriga/gatsby-plugin-global-styles) allows you to define multiple global CSS style sheets which the plugin will compile into one style tag and automatically place at the top of `<head>`.
 
-For a full guide to the plugin, please visit: [gatsby-plugin-global-styles](https://github.com/magnusriga/gatsby-plugin-global-styles)
+Result: You can be sure your more specific CSS styles (like `styled-components` or `CSS Modules`) overwrite the more general global styles compiled by [gatsby-plugin-global-styles](https://github.com/magnusriga/gatsby-plugin-global-styles).
+
+To showcase the full power of the plugin, this starter includes multiple styling approaches such as `styled-components`, `Material-UI`, and `typography.js`.
+
+For a complete plugin guide, please visit: [gatsby-plugin-global-styles](https://github.com/magnusriga/gatsby-plugin-global-styles)
 
 ## 🚀 Quick start
 
