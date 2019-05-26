@@ -1,8 +1,6 @@
 import React from 'react';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { create } from 'jss';
-import { createGenerateClassName, jssPreset, MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeProvider } from 'styled-components';
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/styles';
 import { ContextProviderComponent } from './src/utils/context';
 
 import Layout from './src/layouts/layout';
@@ -28,16 +26,7 @@ import theme from './src/styles/theme';
 // FIXING CSS INJECTION ORDER
 // =================================
 
-// Inject MUI styles at top of head (only below Typography.js)
-// Above Styled-Components
-// Which gives Styled-Components higher specificity
-// Result: Typography.js > MUI > Styled-Components > Inline CSS
-const generateClassName = createGenerateClassName();
-const jss = create({
-  ...jssPreset(),
-  // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-  insertionPoint: document.getElementById('jss-insertion-point'),
-});
+// Handled by gatsby-plugin-material-ui
 
 /** Theme is MUI-based. Uses MUI's createMuiTheme.
  *  MuiThemeProvider applies MUI theme to all MUI components within.
@@ -49,17 +38,16 @@ const wrapRootElement = ({ element }) => {
     <>
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <JssProvider jss={jss} generateClassName={generateClassName}>
-            <ContextProviderComponent>{element}</ContextProviderComponent>
-          </JssProvider>
+          <ContextProviderComponent>{element}</ContextProviderComponent>
         </ThemeProvider>
       </MuiThemeProvider>
     </>
   );
 };
 
-const wrapPageElement = ({ element, props }) => {
-  return <Layout>{element}</Layout>;
+const wrapPageElement = ({ element, props: { location } }) => {
+  console.log('location from gatsby-browser:', location);
+  return <Layout location={location}>{element}</Layout>;
 };
 
 // eslint-disable-next-line import/prefer-default-export

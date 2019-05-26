@@ -1,38 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
-import styled from 'styled-components';
 // import Helmet from 'react-helmet';
 
 import Header from '../components/header';
 
-const Container = styled.div`
-  margin: 0 auto;
-  max-width: 960;
-  padding: 0px 1.0875rem 1.45rem;
-  padding-top: 0;
-`;
-
-const Layout = ({ children }) => {
+const Layout = props => {
   const data = useStaticQuery(graphql`
     query HeaderQuery {
       site {
         siteMetadata {
           title
+          nav {
+            path
+            name
+            hidden
+          }
         }
       }
     }
   `);
 
+  const { children, location } = props;
+
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <Container>
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with {` `} <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </Container>
+      <Header location={location} siteTitle={data.site.siteMetadata.title} nav={data.site.siteMetadata.nav}>
+        {children}
+      </Header>
     </>
   );
 };

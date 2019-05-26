@@ -8,17 +8,14 @@
 import { css } from '@nfront/global-styles';
 
 const globalStyle = css`
-  .my-class2 {
-    margin-bottom: 10rem;
-  }
-
-  html {
-    background-color: blue;
-  }
-
   body {
     color: ${props => (props.light ? 'white' : 'black')};
     font-family: ${props => props.theme.typography.fontFamily};
+  }
+
+  a {
+    text-shadow: none;
+    background-image: none;
   }
 `;
 

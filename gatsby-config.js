@@ -1,3 +1,6 @@
+require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 // ================================
 // GATSBY CONFIGURATION (gatsby-config.js)
 // ================================
@@ -27,10 +30,9 @@ module.exports = {
     twitterUsername: '@nfront_io',
     lang: 'en',
     nav: [
-      { path: 'https://nfront.io/News', name: 'News', hidden: true },
+      { path: 'https://nfront.io', name: 'Home', hidden: true },
       { path: '/#about', name: 'About' },
-      { path: '/#expertise', name: 'Expertise' },
-      { path: '/#languages', name: 'Languages' },
+      { path: '/page-2', name: 'Page2' },
       { path: '/#contact', name: 'Contact' },
     ],
     // categories: [
@@ -42,15 +44,37 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: `gatsby-plugin-material-ui`,
+      // If you want to use styled components, in conjunction to Material-UI, you should:
+      // - Change the injection order
+      // - Add the plugin
+      options: {
+        disableAutoprefixing: true,
+        disableMinification: true,
+        // stylesProvider: {
+        //   // <StylesProvider /> props
+        //   injectFirst: true,
+        // },
+        pathToStylesProvider: 'src/utils/styles-provider-props',
+      },
+    },
+    {
       resolve: 'gatsby-plugin-global-styles',
       options: {
-        // pathToConfigModule: `src/styles/GlobalStyleComponent`,
+        pathToConfigModule: `src/styles/GlobalStyleComponent`,
         props: {
-          // theme: `src/styles/theme`,
+          theme: `src/styles/theme`,
           other: {
-            light: true,
+            light: false,
           },
         },
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-typography',
+      options: {
+        pathToConfigModule: `src/utils/typography`,
+        omitGoogleFont: false,
       },
     },
     `gatsby-plugin-styled-components`,
@@ -84,13 +108,6 @@ module.exports = {
       options: {
         path: `${__dirname}/src/images`, // Folder containing content loadable from disk with GraphQL (e.g. images, Markdowns, etc.)
         name: `images`,
-      },
-    },
-    {
-      resolve: 'gatsby-plugin-typography',
-      options: {
-        pathToConfigModule: `src/utils/typography`,
-        omitGoogleFont: false,
       },
     },
     {

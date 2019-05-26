@@ -5,30 +5,15 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import styled from 'styled-components';
 import { darken, fade } from '@material-ui/core/styles/colorManipulator';
-// import { palette, spacing, typography } from '@material-ui/system';
+import { makeStyles } from '@material-ui/styles';
 
 // Import other components
 import StyledSection from '../components/section';
 import Image from '../components/image';
 // import SEO from '../components/SEO';
 
-// Component-scoped CSS
-// ...
-
-// import GlobalStyleComponent from '../styles/createGlobalStyles';
-// import CreateGlobalStyle from '../styles/createGlobalStyles';
-
-// const GlobalStyleComponent = new CreateGlobalStyle();
-
-// const ele = <CreateGlobalStyle whiteFont />;
-
-// const ele2 = ele.render();
-
-// console.log('JJJJJ: ', ele);
-
 const StyledButton = styled(Button)`
   color: ${props => {
-    // console.log('STYLEDBUTTON propss:', props);
     return props.theme.palette.primary.contrastText;
   }};
   background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
@@ -62,49 +47,115 @@ const StyledH2 = styled.h2`
   color: red;
 `;
 
-styled(Typography)`
-  &.my-class {
-    margin-bottom: 5rem;
+const H1Styled = styled(Typography)`
+  .MuiTypography-h1 {
+    margin-bottom: 1rem;
+    color: red;
   }
 `;
 
-const IndexPage = () => (
-  <>
-    {/* <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} /> */}
-    <h1>Hi people</h1>
-    <Typography variant="h1" gutterBottom>
-      Hi people
-    </Typography>
+const H1Styled2 = styled(Typography)`
+  margin-bottom: 1rem;
+  color: red;
+`;
 
-    <h2>Testing h2</h2>
+const useStylesClassNames = makeStyles({
+  h1: {
+    marginBottom: '0.5rem',
+  }, // a style rule
+});
 
-    <Typography className="my-class2" component="h2" variant="h2">
-      Testing h2 (MUI)
-    </Typography>
-    <h2 style={{ color: 'yellow' }}>Testing h2 with inline</h2>
-    <StyledH2>Testing StyledH2</StyledH2>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
+const useStylesClasses = makeStyles({
+  h1: {
+    marginBottom: '10rem',
+  }, // a style rule
+});
 
-    <StyledButton>Hello World</StyledButton>
+styled(Typography)`
+  .my-class2 {
+    color: orange;
+  }
+`;
 
-    <Button color="primary">Primary</Button>
-    <Button color="secondary">Secondary</Button>
+const IndexPage = props => {
+  // console.log('props on index:', props);
+  const classes1 = useStylesClassNames();
+  const classes2 = useStylesClasses();
+  // const { location, handleSetLocation } = props;
+  // handleSetLocation(location);
 
-    <Typography>body1</Typography>
-    <Typography variant="subtitle1">subtitle</Typography>
-
-    <Button>Button</Button>
-
-    <StyledSection />
-    <StyledSection textRight />
-    <Link component={GatsbyLink} variant="body2" to="/page-2/">
-      Go to page 2
-    </Link>
-  </>
-);
+  return (
+    <>
+      {/* <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} /> */}
+      <Typography variant="h1" style={{ marginBottom: '1rem' }}>
+        gatsby-starter-global-styles
+      </Typography>
+      <p>
+        Below you can see how the different styling providers play together and overwrite each other. <br />
+        <br />
+        Parenthesis indicates style, for example margin-bottom: 3rem (mb-3).
+      </p>
+      <p>
+        The cascade is as follows (right overwrites left):
+        <br />
+        typography.js (least specific) <b>{'<'}</b> gatsby-plugin-global-styles <b>{'<'}</b> Material-UI styles{' '}
+        <b>{'<'}</b> styled-components (most specific)
+      </p>
+      <Typography variant="h1" style={{ marginTop: '3rem' }}>
+        MuiTypography-h1 using theme values (mb: 3rem)
+      </Typography>
+      Note to below: When using styled components, do not try to overwrite specific MUI classes, it will NOT work.
+      Instead, just use styled-components the normal way. They are higher than MUI in the cascade, and will therefore
+      overwrite MUI anyways. The below attempted to set color:red and mb-1.
+      <H1Styled variant="h1">
+        MuiTypography-h1 with MUI class overwritten with styled-components (color: red, mb: 1rem).
+      </H1Styled>
+      Above point can be seen here (it works using styled-components normally).
+      <H1Styled2 variant="h1">
+        MuiTypography-h1 with MUI class overwritten with styled-components (color: red, mb: 1rem).
+      </H1Styled2>
+      xxx
+      <Typography variant="h1" className={classes1.h1}>
+        MuiTypography-h1 overwritten with className (mb: 0.5rem).
+      </Typography>
+      xxx
+      <Typography variant="h1" classes={{ h1: classes2.h1 }}>
+        MuiTypography-h1 overwritten with classes (mb: 10rem).
+      </Typography>
+      xxx
+      <h2>Regular h2</h2>
+      xxx
+      <Typography className="my-class2" component="h2" variant="h2">
+        MuiTypography-h2, attempting to add new class via className using class injected with styled-components. When
+        using styled-components, it does not work to overwrite MUI class names. Just use the styled-components the
+        normal way, as it is higher in the cascade than MUI. (Failed: color: orange).
+      </Typography>
+      xxx
+      <h2 style={{ color: 'yellow' }}>Regular h2 with inline style (color: yellow).</h2>
+      xxxx
+      <StyledH2>H2 styled-component (color: red).</StyledH2>
+      xxxxxxxxxxxxxxx
+      <p>Welcome to your new Gatsby site.</p>
+      <p>Now go build something great.</p>
+      <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
+        <Image />
+      </div>
+      <Typography id="about" variant="h1" classes={{ h1: classes2.h1 }}>
+        About Us.
+      </Typography>
+      <StyledButton>Hello World</StyledButton>
+      <Button color="primary">Primary</Button>
+      <Button color="secondary">Secondary</Button>
+      <Typography variant="body1">body1</Typography>
+      <Typography variant="subtitle1">subtitle</Typography>
+      <Button>Button</Button>
+      <StyledSection />
+      <StyledSection textRight />
+      <Link component={GatsbyLink} variant="body1" to="/page-2/">
+        Go to page 2
+      </Link>
+    </>
+  );
+};
 
 export default IndexPage;

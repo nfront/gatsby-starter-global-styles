@@ -75,18 +75,17 @@ const muiTheme = createMuiTheme({
     // Every MUI component class has following naming convention
     // Mui[component name]-[style rule name]-[UUID]
     // Explore: Component API & DevTools
-
     // [component name] / style sheet names
-    MuiTypography: {
-      // [style rule names]
-      h1: {
-        // Some CSS
-        marginBottom: '3rem',
-      },
-      h2: {
-        marginBottom: '1rem',
-      },
-    },
+    // MuiTypography: {
+    //   // [style rule names]
+    //   h1: {
+    //     // Some CSS
+    //     marginBottom: '3rem',
+    //   },
+    //   h2: {
+    //     marginBottom: '1rem',
+    //   },
+    // },
   },
   palette: {
     primary: blue,
@@ -108,14 +107,12 @@ const muiTheme = createMuiTheme({
     // Buttons etc.
     borderRadius: 4,
   },
-  spacing: {
-    // Default unit: 8
-    // I.e. m-2 --> 2*8 = 16px margin
-    // Can be array or function
-    // Info: https://material-ui.com/system/spacing
-    // Horizontal centering: mx="auto"
-    unit: 8,
-  },
+  spacing: 8,
+  // Default unit: 8
+  // I.e. m-2 --> 2*8 = 16px margin
+  // Can be array or function
+  // Info: https://material-ui.com/system/spacing
+  // Horizontal centering: mx="auto"
   // Add custom variables exposed to components via theme
   status: {
     // My business variables
@@ -130,6 +127,7 @@ const muiTheme = createMuiTheme({
     useNextVariants: true,
     fontFamily: [`"Roboto", "Helvetica", "Arial", "sans-serif"`].join(','),
     // fontWeightMedium: 500,
+    fontSize: 16,
     h1: {
       // Gatsby theme
       // Default: 6rem
@@ -139,6 +137,7 @@ const muiTheme = createMuiTheme({
       // color: blue[500],
       lineHeight: 1.1,
       letterSpacing: 'normal',
+      marginBottom: '3rem',
     },
     h2: {
       // Default: 6rem
@@ -148,9 +147,13 @@ const muiTheme = createMuiTheme({
       // color: blue[500],
       lineHeight: 1.1,
       letterSpacing: 'normal',
+      marginBottom: '1rem',
     },
-    // body1: {
-    //   fontWeight: 400,
+    body1: {
+      fontSize: '1rem',
+    },
+    // body2: {
+    //   fontSize: '1rem',
     // },
     // subtitle1: {
     //   fontSize: '1rem',

@@ -28,7 +28,7 @@ const Section = props => {
     <StyledSection>
       <TextDiv {...props}>
         <Typography component="h2" variant="h2" gutterBottom>
-          About Us
+          H2 Header
         </Typography>
         <Typography variant="body1" gutterBottom>
           body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam
@@ -36,7 +36,11 @@ const Section = props => {
           Eum quasi quidem quibusdam.
         </Typography>
       </TextDiv>
-      <ImageDiv>And here are some pictures</ImageDiv>
+      <ImageDiv>
+        And here are some pictures.
+        <br />
+        We can swap picture box between left and right side, via a quick props change.
+      </ImageDiv>
     </StyledSection>
   );
 };

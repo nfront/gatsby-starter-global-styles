@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/styles';
+import Layout from './src/layouts/layout';
 
 // MUI theme
 import theme from './src/styles/theme';
@@ -14,4 +15,9 @@ const wrapRootElement = ({ element, pathname }) => {
   );
 };
 
-export { wrapRootElement };
+const wrapPageElement = ({ element, props: { location } }) => {
+  console.log('location from gatsby-ssr:', location);
+  return <Layout location={location}>{element}</Layout>;
+};
+
+export { wrapRootElement, wrapPageElement };
