@@ -1,0 +1,2 @@
+var r=require("rxjs"),e=require("rxjs/operators"),n=require("react");module.exports=function(t){var o=n.useState({scrollX:0,scrollY:0}),u=o[0],s=o[1];return n.useEffect(function(){var n=null;return window?(n=r.fromEvent(window,"scroll").pipe(e.throttleTime(t),e.map(function(r){return{scrollX:window.pageXOffset,scrollY:window.pageYOffset}})).subscribe(function(r){return s(r)}),function(){n.unsubscribe()}):null},[t,u]),u};
+//# sourceMappingURL=index.js.map

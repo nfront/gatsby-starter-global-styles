@@ -87,8 +87,8 @@ const IndexPage = props => {
   return (
     <>
       {/* <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} /> */}
-      <Typography variant="h1" style={{ marginBottom: '1rem' }}>
-        gatsby-starter-global-styles
+      <Typography id="about" variant="h1" style={{ marginBottom: '1rem' }}>
+        About Us: gatsby-starter-global-styles
       </Typography>
       <p>
         Below you can see how the different styling providers play together and overwrite each other. <br />
@@ -140,8 +140,8 @@ const IndexPage = props => {
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
         <Image />
       </div>
-      <Typography id="about" variant="h1" classes={{ h1: classes2.h1 }}>
-        About Us.
+      <Typography id="contact" variant="h1" classes={{ h1: classes2.h1 }}>
+        Contact Us.
       </Typography>
       <StyledButton>Hello World</StyledButton>
       <Button color="primary">Primary</Button>

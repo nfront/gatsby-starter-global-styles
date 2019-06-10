@@ -46,7 +46,6 @@ const wrapRootElement = ({ element }) => {
 };
 
 const wrapPageElement = ({ element, props: { location } }) => {
-  console.log('location from gatsby-browser:', location);
   return <Layout location={location}>{element}</Layout>;
 };
 

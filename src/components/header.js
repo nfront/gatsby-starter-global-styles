@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,8 +17,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import styled from 'styled-components';
-import { Link, withPrefix } from 'gatsby';
+import { withPrefix } from 'gatsby';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useScrollPosition from '@nfront/use-scroll-position';
+import { ListItemLink } from '../utils/Link';
 
 const drawerWidth = 240;
 
@@ -95,122 +97,79 @@ const HorNavRight = styled(({ hide, ...otherProps }) => <List {...otherProps} />
   display: ${props => (props.hide ? 'none' : 'flex')};
 `;
 
-const RenderLink = React.forwardRef((itemProps, ref) => (
-  // with react-router-dom@^5.0.0 use `ref` instead of `innerRef`
-  // Components using RenderLink, can get a ref to the underlying Link
-  // component (for focus etc.)
-  <Link {...itemProps} ref={ref} />
-));
-
-function ListItemLink(props) {
-  // console.log('ResolvedLink', <ResolvedLink {...props} />);
-  const { to, isHomePage, ...other } = props;
-  // console.log('isHomePage:', isHomePage);
-  const LOCAL_URL = /^\/(?!\/)/;
-  const HASH_URL = /^\/(?=#)/;
-
-  // const LOCAL_URL_INC_IN_ROUTE = /^\/(?!\/)(?=#)/;
-
-  // Starting with slash, no second slash or hashtag
-  // These are local links, excluding in-route
-  // const LOCAL_URL_NOT_IN_ROUTE = /^\/(?!\/)(?!#)/;
-  // const gatsbyLink = LOCAL_URL_NOT_IN_ROUTE.test(to);
-  // const comp = gatsbyLink ? RenderLink : 'a';
-
-  function stopPropagation(e) {
-    console.log('stopping propagation');
-    e.stopPropagation();
-  }
-
-  // return <a href={to} onClick={stopPropagation}>{props.children}</a>;
-  // return <ListItem button component="a" href={to} {...other} onClick={stopPropagation} />;
-
-  if (!LOCAL_URL.test(to)) {
-    // Foreign route, use <a>
-    // All routes starting with a single slash
-    // Except those with a second slash thereafter
-    console.log('Foreign route, use <a>:', to);
-    return <ListItem button component="a" href={to} {...other} onClick={stopPropagation} />;
-  }
-
-  // Local route, either with hashtag or not
-  if (HASH_URL.test(to)) {
-    // hash URL, should use <a> on HomePage, otherwise Gatsby Link
-    if (isHomePage()) {
-      // Hash link at home page (in-route), should use <a>
-      console.log('Hash link at home page (in-route), should use <a>:', to);
-      // return <ListItem button component="a" href={to} {...other} onClick={stopPropagation} />;
-      return <a href={to} {...other} onClick={stopPropagation} />;
-    }
-    console.log('Hash link at NOT at home page, should use Link:', to);
-    // Hash link at NOT at home page, should use Link
-    return <ListItem button component={RenderLink} to={to} {...other} onClick={stopPropagation} />;
-  }
-
-  console.log('Regular local route, not hash route, should use Gatsby Link:', to);
-  // Regular local route, not hash route, should use Gatsby Link
-  return <ListItem button component={RenderLink} to={to} {...other} onClick={stopPropagation} />;
-}
-
 const NavItemLink = props => {
-  const { top, to, icon, primary, secondary, handleDrawerClose, isHomePage } = props;
+  const { top, to, icon, primary, secondary, handleDrawerClose, isHome } = props;
 
-  const closeDrawer = top ? () => {} : handleDrawerClose;
   return (
-    <ListItemLink to={to} onClick={closeDrawer} isHomePage={isHomePage}>
+    <ListItemLink to={to} onClick={handleDrawerClose} isHome={isHome}>
       {icon && <ListItemIcon>{icon}</ListItemIcon>}
       <ListItemText primary={primary} secondary={secondary} primaryTypographyProps={top && { variant: 'h6' }} />
     </ListItemLink>
   );
 };
 
-let navLinks = null;
+const generateNavLinks = (nav, pathname) => {
+  console.log('SETTING UP NAVLINKS. pathname:', pathname);
+  // Returns new array of navlinks
+  return nav.map((navItem, index) => (
+    <NavItemLink
+      top
+      key={navItem.name}
+      to={navItem.path}
+      primary={navItem.name}
+      isHome={pathname === withPrefix('/')}
+    />
+  ));
+};
+
+const getScrolledPastHeader = (phone, theme, scrollY) => {
+  const headerHeight = phone ? theme.mixins.toolbar.minHeightPhone : theme.mixins.toolbar.minHeightDesktop;
+  console.log('headerHeight, scrollY', headerHeight, scrollY);
+  return scrollY > headerHeight;
+};
 
 const Header = props => {
   const { location, siteTitle, children, nav } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const phone = !useMediaQuery('(min-width:768px)'); // 768 and down: Smartphones
+  const scrollPosition = useScrollPosition(100);
 
-  const isHomePage = useCallback(() => {
-    // useCallback ensures this handler only changes when location changes
-    // That ensures the useEffect below can have isHomePage as a dependency
-    const isHome = location.pathname === withPrefix('/');
-    console.log('isHomePage:', isHome);
-    return isHome;
-  }, [location]);
+  const scrolledPastHeader = useMemo(() => getScrolledPastHeader(phone, theme, scrollPosition.scrollY), [
+    phone,
+    theme,
+    scrollPosition.scrollY,
+  ]);
+  console.log('scrolledPastHeader', scrolledPastHeader);
 
+  console.log('RENDERING HEADER, ONCE PER PAGE. NOW AT:', location.pathname);
+
+  // Close drawer when swapping from phone to desktop size
   useEffect(() => {
-    if (!phone) handleDrawerClose();
-  }, [phone]);
+    if (!phone && drawerOpen) handleDrawerClose();
+  }, [phone, drawerOpen]);
 
-  useEffect(() => {
-    console.log('SETTING UP NAVLINKS...');
-    navLinks = nav.map((navItem, index) => (
-      <NavItemLink top key={navItem.name} to={navItem.path} primary={navItem.name} isHomePage={isHomePage} />
-    ));
-  }, [location, isHomePage, nav]);
+  const navLinks = useMemo(() => generateNavLinks(nav, location.pathname), [location.pathname, nav]);
 
   function handleDrawerOpen(e) {
     e && e.stopPropagation();
     console.log('OPENING DRAWER');
-    setOpen(true);
+    setDrawerOpen(true);
   }
 
   function handleDrawerClose(e) {
     e && e.stopPropagation();
     console.log('CLOSING DRAWER');
-    setOpen(false);
+    setDrawerOpen(false);
   }
 
-  console.log('RENDERING HEADER, ONCE PER PAGE. NOW AT:', location);
   return (
     <div className={classes.root}>
       <AppBar
         position="fixed"
         className={classNames(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: drawerOpen,
         })}
         onClick={handleDrawerClose}
       >
@@ -223,30 +182,19 @@ const Header = props => {
             aria-label="Open drawer"
             edge="end"
             onClick={handleDrawerOpen}
-            className={classNames(open && classes.hide, !phone && classes.hide)}
+            className={classNames(drawerOpen && classes.hide, !phone && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
           <HorNavRight component="nav" hide={phone}>
             {navLinks}
-            {/* {nav.map((navItem, index) => (
-              <NavItemLink top key={navItem.name} to={navItem.path} primary={navItem.name} isHomePage={isHomePage} />
-            ))} */}
-            <a
-              href="#about"
-              onClick={e => {
-                e.stopPropagation();
-              }}
-            >
-              Anchor
-            </a>
           </HorNavRight>
         </Toolbar>
       </AppBar>
       <Container id="mainPage" onClick={handleDrawerClose}>
         <main
           className={classNames(classes.content, {
-            [classes.contentShift]: open,
+            [classes.contentShift]: drawerOpen,
           })}
         >
           <div className={classes.drawerHeader} />
@@ -260,7 +208,7 @@ const Header = props => {
         className={classNames(classes.drawer)}
         variant="persistent"
         anchor="right"
-        open={open}
+        open={drawerOpen}
         classes={{
           paper: classes.drawerPaper,
         }}
@@ -271,19 +219,7 @@ const Header = props => {
           </IconButton>
         </div>
         <Divider />
-        <List component="nav">
-          {navLinks}
-          {/* {nav.map((navItem, index) => (
-            <NavItemLink
-              key={navItem.name}
-              to={navItem.path}
-              icon={index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              primary={navItem.name}
-              handleDrawerClose={handleDrawerClose}
-              isHomePage={isHomePage}
-            />
-          ))} */}
-        </List>
+        <List component="nav">{navLinks}</List>
         <Divider />
         <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (

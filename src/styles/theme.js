@@ -60,13 +60,19 @@ const muiTheme = createMuiTheme({
     // At small screen: 56 high
     // At landscape: 48 high (smallest)
     // At wide screens: 64 high (tallest)
+    // TODO: Make it work in Link without pre-set values
     toolbar: {
       minHeight: 56,
+      minHeightPhone: 64,
+      minHeightDesktop: 76,
       '@media (min-width:0px) and (orientation: landscape)': {
         minHeight: 48,
       },
       '@media (min-width:600px)': {
         minHeight: 64,
+      },
+      '@media (min-width:768px)': {
+        minHeight: 76,
       },
     },
   },
