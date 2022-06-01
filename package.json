@@ -40,7 +40,7 @@
     "react-scroll": "^1.7.11",
     "react-typography": "^0.16.19",
     "rxjs": "^6.5.2",
-    "sharp": "^0.22.0",
+    "sharp": "^0.30.5",
     "styled-components": "^4.2.0",
     "typography": "^0.16.19",
     "typography-theme-ocean-beach": "^0.16.19"
